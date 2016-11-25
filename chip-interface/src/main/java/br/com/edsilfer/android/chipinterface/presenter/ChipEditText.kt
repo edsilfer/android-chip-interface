@@ -38,11 +38,10 @@ class ChipEditText : EditText, ChipControl {
         DRAWABLE_BOTTOM(3);
     }
 
-
-
     companion object {
         private var mCallback : CustomCallback? = null
         var isAddingChip = false
+        var count = 0
     }
 
 
@@ -103,18 +102,19 @@ class ChipEditText : EditText, ChipControl {
         parts.filter { it != chip.getTitle() }.forEach { setText("${text} $it ") }
     }
 
-    private class CustomCallback(val mRootView : View, val mChip : Chip, val mInput : EditText, val mReplaceable : String) : Callback {
+    private class CustomCallback(val mRootView : View, val mChip : Chip, val mInput : EditText, var mReplaceable : String) : Callback {
         override fun onError() {
             Log.e(this.javaClass.simpleName, "Unable to load thumbnail")
         }
 
         override fun onSuccess() {
+            println("replaceable: $mReplaceable")
             val bd = mRootView.getDrawable()
             bd.setBounds(0, 0, bd.intrinsicWidth, bd.intrinsicHeight)
-            val sb = SpannableStringBuilder("$mReplaceable ")
-            sb.setSpan(ImageSpan(bd), 0, mReplaceable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val sb = SpannableStringBuilder(TextUtils.concat(mInput.text, " "))
+            sb.setSpan(ImageSpan(bd), mInput.text.length - mReplaceable.length, mInput.text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             println("currently mInput.text is: ${mInput.text}")
-            mInput.setText(sb)
+            mInput.text = sb
             mInput.setSelection(mInput.text.length)
             println("input after including span: ${mInput.text}")
             ChipEditText.isAddingChip = false

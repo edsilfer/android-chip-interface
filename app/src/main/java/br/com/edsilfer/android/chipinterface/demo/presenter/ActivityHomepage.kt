@@ -27,11 +27,11 @@ class ActivityHomepage : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val parts = chipEditText.text.toString().split(" ");
-                if (parts.last().length > 3) {
+                if (parts.last().length > 3 && p3 != 0) {
                     FakeDataProvider.provideChats()
                             .filter { it.getTitle().toLowerCase().contains(parts.last()) }
                             .forEach {
-                                (chipEditText as ChipControl).addChip(this@ActivityHomepage, it, chipEditText.text.toString())
+                                (chipEditText as ChipControl).addChip(this@ActivityHomepage, it, parts.last())
                             }
                 }
             }
