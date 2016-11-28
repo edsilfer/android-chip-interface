@@ -1,28 +1,31 @@
 package br.com.edsilfer.android.chipinterface.presenter
 
+import android.app.Dialog
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipControl
 import br.com.edsilfer.kotlin_support.extensions.getDrawable
-import br.com.edsilfer.kotlin_support.extensions.log
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.rsc_item_chip.view.*
+import kotlinx.android.synthetic.main.rsc_chip.view.*
+import org.jetbrains.anko.onClick
 
 
 /**
@@ -39,16 +42,16 @@ class ChipEditText : EditText, ChipControl {
     }
 
     companion object {
-        private var mCallback : CustomCallback? = null
-        var isAddingChip = false
-        var count = 0
+        private var mCallback: CustomCallback? = null
+        private var isAddingChip = false
+        private var mPosX = -1f
+        private var mPosY = -1f
     }
 
 
     private var mThumbnail: CircularImageView? = null
-    private var mRootView : View? = null
-    private var mLabel : TextView? = null
-
+    private var mRootView: View? = null
+    private var mLabel: TextView? = null
 
     constructor(context: Context) : super(context) {
     }
@@ -64,11 +67,11 @@ class ChipEditText : EditText, ChipControl {
 
 
     // PUBLIC INTERFACE
-    override fun addChip(context: Context, chip: Chip, replaceable : String) {
+    override fun addChip(context: Context, chip: Chip, replaceable: String) {
         if (!ChipEditText.isAddingChip) {
             ChipEditText.isAddingChip = true
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            mRootView = inflater.inflate(R.layout.rsc_item_chip, null)
+            mRootView = inflater.inflate(R.layout.rsc_chip, null)
 
             mLabel = mRootView!!.findViewById(R.id.label) as TextView
             mThumbnail = mRootView!!.findViewById(R.id.thumbnail) as CircularImageView
@@ -102,22 +105,58 @@ class ChipEditText : EditText, ChipControl {
         parts.filter { it != chip.getTitle() }.forEach { setText("${text} $it ") }
     }
 
-    private class CustomCallback(val mRootView : View, val mChip : Chip, val mInput : EditText, var mReplaceable : String) : Callback {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        mPosX = event.x
+        mPosY = event.y
+        return super.onTouchEvent(event)
+    }
+
+    private class CustomCallback(val mRootView: View, val mChip: Chip, val mInput: EditText, var mReplaceable: String) : Callback {
         override fun onError() {
             Log.e(this.javaClass.simpleName, "Unable to load thumbnail")
         }
 
         override fun onSuccess() {
-            println("replaceable: $mReplaceable")
             val bd = mRootView.getDrawable()
             bd.setBounds(0, 0, bd.intrinsicWidth, bd.intrinsicHeight)
             val sb = SpannableStringBuilder(TextUtils.concat(mInput.text, " "))
+
             sb.setSpan(ImageSpan(bd), mInput.text.length - mReplaceable.length, mInput.text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            println("currently mInput.text is: ${mInput.text}")
+            sb.setSpan(object : ClickableSpan() {
+                override fun onClick(view: View) {
+                    shopPopup(view)
+                }
+            }, mInput.text.length - mReplaceable.length, mInput.text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
             mInput.text = sb
             mInput.setSelection(mInput.text.length)
-            println("input after including span: ${mInput.text}")
             ChipEditText.isAddingChip = false
+            mInput.movementMethod = LinkMovementMethod.getInstance();
+        }
+
+        private fun shopPopup(view: View) {
+            val dialog = Dialog(view.context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.window.setDimAmount(0f)
+            dialog.setContentView(R.layout.rsc_chip_details)
+            val wmlp = dialog.window.attributes
+            wmlp.gravity = Gravity.TOP or Gravity.LEFT
+            wmlp.x = mPosX.toInt()
+            wmlp.y = mPosY.toInt()
+
+            val thumbnail = dialog.findViewById(R.id.thumbnail) as ImageView
+            val header = dialog.findViewById(R.id.header) as TextView
+            val subheader = dialog.findViewById(R.id.subheader) as TextView
+            val close = dialog.findViewById(R.id.close) as ImageButton
+
+            close.onClick {
+                dialog.dismiss()
+            }
+
+            Picasso.with(view.context).load(mChip.getThumbnail()).fit().centerCrop().into(thumbnail)
+            header.text = mChip.getTitle()
+
+            dialog.show()
         }
     }
 }
