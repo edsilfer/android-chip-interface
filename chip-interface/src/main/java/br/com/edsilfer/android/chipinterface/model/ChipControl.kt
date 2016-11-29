@@ -8,9 +8,11 @@ import android.content.Context
 
 interface ChipControl {
 
-    fun addChip(context : Context, chip: Chip, replaceable : String)
+    fun addChip(chip: Chip, replaceable : String)
 
     fun removeChip(chip: Chip)
+
+    fun setChipStyle (style : ChipPalette)
 
 }
 

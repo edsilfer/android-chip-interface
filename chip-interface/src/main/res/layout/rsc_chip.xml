@@ -1,39 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/label_wrapper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:elevation="-1dp"
-        android:background="@android:color/white"
-        app:cardCornerRadius="15dip">
-
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dip"
-            android:layout_marginEnd="8dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="8dip"
-            android:layout_marginStart="38dip"
-            android:layout_marginTop="4dip"
-            android:gravity="center_vertical"
-            android:maxLength="7"
-            android:textAlignment="center" />
-    </android.support.v7.widget.CardView>
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/thumbnail"
         android:layout_width="35dip"
         android:layout_height="35dip"
-        android:layout_alignTop="@id/label_wrapper"
         android:layout_centerVertical="true"
         android:elevation="4dip"
         app:civ_border_width="0dp" />

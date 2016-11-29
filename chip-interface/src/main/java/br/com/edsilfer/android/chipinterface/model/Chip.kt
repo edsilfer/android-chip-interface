@@ -5,7 +5,9 @@ package br.com.edsilfer.android.chipinterface.model
  */
 
 interface Chip {
-    fun getTitle(): String
+    fun getHeader(): String
+
+    fun getSubheader(): String
 
     fun getThumbnail(): String
 }

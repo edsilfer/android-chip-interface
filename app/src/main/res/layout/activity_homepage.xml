@@ -13,17 +13,24 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
             android:layout_marginEnd="5dip"
             android:layout_marginRight="5dip"
+            android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <br.com.edsilfer.android.chipinterface.presenter.ChipEditText
-                android:id="@+id/chipEditText"
+            <android.support.design.widget.TextInputLayout
+                theme="@style/LightSearchContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"/>
+                android:layout_margin="3dip"
+                android:hint="Search heroes chats">
 
+                <br.com.edsilfer.android.chipinterface.presenter.ChipEditText
+                    android:id="@+id/chipEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent" />
+            </android.support.design.widget.TextInputLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 </LinearLayout>

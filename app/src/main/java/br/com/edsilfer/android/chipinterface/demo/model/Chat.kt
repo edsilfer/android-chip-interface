@@ -30,8 +30,12 @@ class Chat(
 
     }
 
-    override fun getTitle(): String {
+    override fun getHeader(): String {
         return mHeader
+    }
+
+    override fun getSubheader(): String {
+        return lastMessage.content
     }
 
     override fun getThumbnail(): String {
