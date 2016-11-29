@@ -17,8 +17,7 @@ object Presets {
                 R.style.default_expanded_subheader,
                 R.color.clr_default_expanded_upper_background,
                 R.color.clr_default_expanded_bottom_background,
-                ChipStyle.SQUARE
+                ChipStyle.CIRCULAR
         )
     }
-
 }

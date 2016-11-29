@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">android-chip-interface</string>
+    <string name="app_name">Chip Interface Demo</string>
+    <string name="str_search_hint">Search heroes chats</string>
 </resources>

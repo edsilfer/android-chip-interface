@@ -1,0 +1,4 @@
+<resources>
+    <string name="str_chip_interface_no_preset_error">Before request to add a chip you need to provide a style</string>
+    <string name="str_chip_interface_thumbnail_loading_error">Unable to load thumbnail</string>
+</resources>

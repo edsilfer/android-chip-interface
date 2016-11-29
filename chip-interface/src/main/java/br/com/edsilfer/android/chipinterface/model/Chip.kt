@@ -4,10 +4,22 @@ package br.com.edsilfer.android.chipinterface.model
  * Created by User on 24/11/2016.
  */
 
-interface Chip {
-    fun getHeader(): String
+abstract class Chip() {
 
-    fun getSubheader(): String
+    companion object {
+        private var objCount = -1.toDouble()
+    }
 
-    fun getThumbnail(): String
+    var chipId = 0.toDouble()
+        private set
+
+    init {
+        chipId = objCount++
+    }
+
+    abstract fun getHeader(): String
+
+    abstract fun getSubheader(): String
+
+    abstract fun getThumbnail(): String
 }

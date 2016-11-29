@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wrapper"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dim_chip_item_details_min_height"
+    android:minHeight="@dimen/dim_chip_item_details_min_height">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <View
+            android:id="@+id/upper_background"
+            android:layout_width="wrap_content"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/bottom_background"
+            android:layout_width="wrap_content"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="@dimen/dim_chip_item_details_min_thumbnail"
+        android:layout_height="@dimen/dim_chip_item_details_min_thumbnail"
+        android:layout_margin="5dip"
+        app:civ_border_width="0dp" />
+
+    <LinearLayout
+        android:id="@+id/info_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="30dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="30dip"
+        android:layout_marginStart="5dip"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:gravity="center_vertical"
+        android:orientation="vertical" />
+
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dip"
+        android:layout_marginRight="5dip"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_close_white_24dp" />
+</RelativeLayout>

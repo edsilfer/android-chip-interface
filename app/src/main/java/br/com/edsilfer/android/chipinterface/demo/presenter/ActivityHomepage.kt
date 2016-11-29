@@ -6,7 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import br.com.edsilfer.android.chipinterface.demo.FakeDataProvider
 import br.com.edsilfer.android.chipinterface.demo.R
-import br.com.edsilfer.android.chipinterface.model.ChipControl
+import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.android.chipinterface.model.Presets
 import br.com.edsilfer.kotlin_support.extensions.paintStatusBar
 import kotlinx.android.synthetic.main.activity_homepage.*

@@ -16,7 +16,7 @@ class Chat(
         var participants: MutableList<User> = mutableListOf<User>(),
         var mThumbnail: String = "",
         var lastMessage: Message
-) : Serializable, Chip {
+) : Serializable, Chip() {
 
     private val chatType: ChatType
 
