@@ -5,7 +5,7 @@
     <dimen name="dim_chip_item_details_min_width">250dip</dimen>
     <dimen name="dim_chip_item_details_min_thumbnail">50dip</dimen>
 
-    <dimen name="dim_chip_item_label_left_margin">40dip</dimen>
-    <dimen name="dim_chip_item_label_right_margin">12dip</dimen>
-    <dimen name="dim_chip_item_label_top_bottom_margin">4dip</dimen>
+    <dimen name="dim_chip_item_label_left_margin">38dip</dimen>
+    <dimen name="dim_chip_item_label_right_margin">8dip</dimen>
+    <dimen name="dim_chip_item_label_top_bottom_margin">6dip</dimen>
 </resources>
