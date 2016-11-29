@@ -100,7 +100,14 @@ class ChipEditText : EditText, ChipControl {
 
         val collapsedHeader = TextView(ContextThemeWrapper(context, mPalette!!.collapsedHeader), null, 0)
         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        params.setMargins(60, 10, 16, 10)
+
+        params.setMargins(
+                context.resources.getDimension(R.dimen.dim_chip_item_label_left_margin).toInt(),
+                context.resources.getDimension(R.dimen.dim_chip_item_label_top_bottom_margin).toInt(),
+                context.resources.getDimension(R.dimen.dim_chip_item_label_right_margin).toInt(),
+                context.resources.getDimension(R.dimen.dim_chip_item_label_top_bottom_margin).toInt()
+        )
+
         collapsedHeader.layoutParams = params
         collapsedHeader.text = content
 
