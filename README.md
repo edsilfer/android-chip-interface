@@ -8,7 +8,14 @@ Introduction
 >
 > Material Design Manifest - Chips _https://material.google.com/components/chips.html_
 
-
+<p align="center">
+  <img src="showcase/ss_showcase_01.png" align="center" width=200>
+  <img src="showcase/ss_showcase_02.png" align="center" width=200>
+  <img src="showcase/ss_showcase_03.png" align="center" width=200>
+  <img src="showcase/ss_showcase_04.png" align="center" width=200>
+  <br /><br />
+  <i><b>Figure 01:</b> Android Chip Interface showcase</i>
+</p>
 
 How does it work?
 -
@@ -67,11 +74,25 @@ abstract class Chip() {
 <p align="center">
   <img src="showcase/ss_layout_explanation.png" align="center" width=450>
   <br /><br />
-  <i><b>Figure 01:</b> Android Chip layout explanation</i>
+  <i><b>Figure 02:</b> Android Chip layout explanation</i>
 </p>
 
 - `addChip(chip: Chip, replaceable : String)`: adds a chip inside `ChipEditTex`. `replaceable` is the typed text existent on `ChipEditTex` that will be replaced by the chip; 
 
 - `removeChip(chip: Chip)`: removes the prev priviously inserted chip;
 
-    fun setChipStyle (style : ChipPalette)
+License
+-
+Copyright 2016 Edgar da Silva Fernandes
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
