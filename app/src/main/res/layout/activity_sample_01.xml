@@ -13,10 +13,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dip"
-            android:layout_marginRight="5dip"
+            android:background="@color/sample01colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.TextInputLayout
                 theme="@style/LightSearchContainer"
@@ -29,7 +30,7 @@
                     android:id="@+id/chipEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent" />
+                    android:background="@android:color/transparent"/>
             </android.support.design.widget.TextInputLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

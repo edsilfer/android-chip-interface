@@ -114,7 +114,9 @@ class CustomCallback(
     private fun setDialogInitialPosition(dialog: Dialog) {
         val wmlp = dialog.window.attributes
         wmlp.gravity = Gravity.TOP or Gravity.LEFT
+        // println("received (x, y): ($mPosX, $mPosY)")
         wmlp.x = mPosX
         wmlp.y = mPosY
+        dialog.window.attributes = wmlp
     }
 }

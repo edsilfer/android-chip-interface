@@ -6,20 +6,21 @@ import android.text.Editable
 import android.text.TextWatcher
 import br.com.edsilfer.android.chipinterface.demo.FakeDataProvider
 import br.com.edsilfer.android.chipinterface.demo.R
-import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.android.chipinterface.model.Presets
+import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.kotlin_support.extensions.paintStatusBar
-import kotlinx.android.synthetic.main.activity_homepage.*
+import kotlinx.android.synthetic.main.activity_sample_01.*
 
 /**
  * Created by User on 24/11/2016.
  */
 
-class ActivityHomepage : AppCompatActivity() {
+class ActivitySample01 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_homepage)
+        setContentView(R.layout.activity_sample_01)
+        paintStatusBar(R.color.sample01colorPrimaryDark)
         chipEditText.setChipStyle(Presets.preset01())
         chipEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {

@@ -17,6 +17,18 @@ object Presets {
                 R.style.default_expanded_subheader,
                 R.color.clr_default_expanded_upper_background,
                 R.color.clr_default_expanded_bottom_background,
+                ChipStyle.SQUARE
+        )
+    }
+
+    fun preset02(): ChipPalette {
+        return ChipPalette(
+                R.style.default_collapsed_header,
+                R.color.clr_default_collapsed_background,
+                R.style.default_expanded_header,
+                R.style.default_expanded_subheader,
+                R.color.clr_sample_background_01,
+                R.color.clr_sample_background_01,
                 ChipStyle.CIRCULAR
         )
     }

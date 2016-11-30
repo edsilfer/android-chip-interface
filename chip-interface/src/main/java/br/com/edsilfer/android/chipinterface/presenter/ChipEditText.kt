@@ -135,6 +135,7 @@ class ChipEditText : EditText, ChipControl {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         mPosX = event.x.toInt()
         mPosY = event.y.toInt()
+        println("onEvent collect -> received (x, y): ($mPosX, $mPosY)")
         return super.onTouchEvent(event)
     }
 }

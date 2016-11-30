@@ -3,4 +3,6 @@
     <color name="clr_default_collapsed_background">#f4f4f4</color>
     <color name="clr_default_expanded_upper_background">#2b5495</color>
     <color name="clr_default_expanded_bottom_background">#4266a1</color>
+
+    <color name="clr_sample_background_01">#4185F2</color>
 </resources>

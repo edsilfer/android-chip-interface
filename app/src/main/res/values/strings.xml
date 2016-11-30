@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Chip Interface Demo</string>
-    <string name="str_search_hint">Search heroes chats</string>
+
+    <!-- SAMPLE 01 -->
+    <string name="str_from_hint">From: </string>
+    <string name="str_to_hint">To: </string>
+    <string name="str_subject_hint">Subject: </string>
+
+    <string name="str_menu_action_01">Attach</string>
+    <string name="str_menu_action_02">Send</string>
+    <string name="str_menu_action_03">Opt 01</string>
+    <string name="str_menu_action_04">Opt 02</string>
+
+    <!-- SAMPLE 01 -->
+    <string name="str_search_hint">Search a hero name: </string>
 </resources>

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#c3c3c3</color>
-    <color name="colorAccent">#777777</color>
+
+    <!-- SAMPLE 01 COLORS -->
+    <color name="sample01colorPrimary">#283593</color>
+    <color name="sample01colorPrimaryDark">#1A237E</color>
+    <color name="sample01colorAccent">#cccccc</color>
+
+    <!-- SAMPLE 02 COLORS -->
+    <color name="colorPrimary">#DB4338</color>
+    <color name="colorPrimaryDark">#B73221</color>
+    <color name="colorAccent">#FFFFFF</color>
+
 </resources>
