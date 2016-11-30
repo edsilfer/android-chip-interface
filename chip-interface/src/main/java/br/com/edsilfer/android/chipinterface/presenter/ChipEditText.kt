@@ -6,14 +6,13 @@ import android.util.AttributeSet
 import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import br.com.edsilfer.android.chipinterface.R
-import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.Chip
+import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso

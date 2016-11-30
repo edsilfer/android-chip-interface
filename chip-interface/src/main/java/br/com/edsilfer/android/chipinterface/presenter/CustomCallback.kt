@@ -1,6 +1,5 @@
 package br.com.edsilfer.android.chipinterface.presenter
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Rect
 import android.text.Spannable
@@ -10,7 +9,10 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.util.Log
-import android.view.*
+import android.view.ContextThemeWrapper
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import br.com.edsilfer.android.chipinterface.R

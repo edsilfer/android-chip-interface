@@ -1,7 +1,7 @@
 package br.com.edsilfer.android.chipinterface.demo.model
 
-import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.demo.model.enum.ChatType
+import br.com.edsilfer.android.chipinterface.model.Chip
 import com.google.gson.Gson
 import java.io.Serializable
 

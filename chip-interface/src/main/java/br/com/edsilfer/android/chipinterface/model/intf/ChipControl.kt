@@ -1,6 +1,5 @@
 package br.com.edsilfer.android.chipinterface.model.intf
 
-import android.content.Context
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 
