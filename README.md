@@ -28,7 +28,7 @@ _For details about technical implementation of this library please refer to the 
 
 Add the library module dependency to your project:
 ```groovy
-compile 'br.com.edsilfer.android:chip-interface:1.0.0'
+compile 'br.com.edsilfer.android:chip-interface:1.0.1'
 ```
 
 - <a name="step2">**Step 02: add `br.com.edsilfer.android.chipinterface.presenter.ChipEditText` to your layout file**
