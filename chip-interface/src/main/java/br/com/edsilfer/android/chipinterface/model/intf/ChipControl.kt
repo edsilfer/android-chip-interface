@@ -15,6 +15,8 @@ interface ChipControl {
 
     fun setChipStyle (style : ChipPalette)
 
+    fun getTextWithNoSpans () : String
+
 }
 
 

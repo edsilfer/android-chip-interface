@@ -2,6 +2,8 @@ package br.com.edsilfer.android.chipinterface.presenter
 
 import android.content.Context
 import android.support.v7.widget.CardView
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.ContextThemeWrapper
 import android.view.Gravity
@@ -52,6 +54,24 @@ class ChipEditText : EditText, ChipControl {
     }
 
     fun init() {
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p3 == 0) {
+                    for (s in mSpans) {
+                        if (s.end > text.length) {
+                            mSpans.remove(s)
+                            break
+                        }
+                    }
+                }
+            }
+        })
     }
 
     override fun isSuggestionsEnabled(): Boolean {
@@ -124,6 +144,15 @@ class ChipEditText : EditText, ChipControl {
 
     override fun setChipStyle(style: ChipPalette) {
         mPalette = style
+    }
+
+    override fun getTextWithNoSpans(): String {
+        var max = 0
+        mSpans
+                .asSequence()
+                .filter { max < it.end }
+                .forEach { max = it.end }
+        return if (max < text.length) text.substring(max, text.length).trim() else ""
     }
 }
 
