@@ -34,8 +34,6 @@ class ChipEditText : EditText, ChipControl {
     }
 
     private var mPalette: ChipPalette? = null
-    private var mPosX = -1
-    private var mPosY = -1
 
     // CONSTUCTORs =================================================================================
     constructor(context: Context) : super(context) {
@@ -75,7 +73,7 @@ class ChipEditText : EditText, ChipControl {
         val view = inflater.inflate(R.layout.rsc_chip, null)
         val thumbnail = view.findViewById(R.id.thumbnail) as CircularImageView
         (view.findViewById(R.id.container) as RelativeLayout).addView(getCardView(chip))
-        mCallback = CustomCallback(view, chip, this, replaceable, mPalette!!, mPosX, mPosY)
+        mCallback = CustomCallback(view, chip, this, replaceable, mPalette!!)
         Picasso.with(context).load(chip.getThumbnail()).into(thumbnail, mCallback)
     }
 
@@ -127,16 +125,6 @@ class ChipEditText : EditText, ChipControl {
 
     override fun setChipStyle(style: ChipPalette) {
         mPalette = style
-    }
-
-    /**
-     * Saves the position user tapped for further use on display chip details popup
-     */
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        mPosX = event.x.toInt()
-        mPosY = event.y.toInt()
-        println("onEvent collect -> received (x, y): ($mPosX, $mPosY)")
-        return super.onTouchEvent(event)
     }
 }
 

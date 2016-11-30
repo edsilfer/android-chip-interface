@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chip Interface Demo</string>
+    <string name="app_name">Demo</string>
 
     <!-- SAMPLE 01 -->
     <string name="str_from_hint">From: </string>

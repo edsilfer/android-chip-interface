@@ -9,6 +9,6 @@
     <!-- SAMPLE 02 COLORS -->
     <color name="colorPrimary">#DB4338</color>
     <color name="colorPrimaryDark">#B73221</color>
-    <color name="colorAccent">#FFFFFF</color>
+    <color name="colorAccent">#888888</color>
 
 </resources>
