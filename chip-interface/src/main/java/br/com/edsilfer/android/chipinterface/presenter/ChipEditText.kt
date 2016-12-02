@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
+import br.com.edsilfer.kotlin_support.extensions.log
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 
@@ -26,11 +28,9 @@ import com.squareup.picasso.Picasso
 
 class ChipEditText : EditText, ChipControl {
 
-    data class Identifier(var start: Int, var end: Int, val id: Double)
-
     companion object {
         private var mCallback: CustomCallback? = null
-        var mSpans = mutableListOf<Identifier>()
+        var mChips = mutableSetOf<Chip>()
         var isAddingChip = false
     }
 
@@ -55,21 +55,40 @@ class ChipEditText : EditText, ChipControl {
 
     fun init() {
         addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
+
+            private var snapshot = ""
+            private var isRemoving = false
+
+            override fun afterTextChanged(p0: Editable) {
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+                snapshot = text.toString()
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p3 == 0) {
-                    for (s in mSpans) {
-                        if (s.end > text.length) {
-                            mSpans.remove(s)
-                            break
-                        }
+            override fun onTextChanged(sequence: CharSequence, start: Int, previousLength: Int, count: Int) {
+                if (!isRemoving && count == 0 && snapshot[start] != ' ') {
+                    isRemoving = true
+                    val chip = getErasedChip(start)
+                    if (chip != null) {
+                        mChips.remove(chip)
+                        updateChipsRange()
                     }
+                    isRemoving = false
                 }
+            }
+
+            private fun getErasedChip(cursor: Int): Chip? {
+                mChips
+                        .filter { isBetween(it.range, cursor) }
+                        .forEach { return it }
+                return null
+            }
+
+            // TODO: MOVE METHOD TO KOTLIN SUPPORT
+            private fun isBetween(range: Pair<Int, Int>, num: Int): Boolean {
+                if (num >= range.first && num <= range.second) return true
+                return false
             }
         })
     }
@@ -81,8 +100,12 @@ class ChipEditText : EditText, ChipControl {
     // PUBLIC INTERFACE ============================================================================
     override fun addChip(chip: Chip, replaceable: String) {
         mPalette ?: throw IllegalArgumentException(context.getString(R.string.str_chip_interface_no_preset_error))
-        if (!ChipEditText.isAddingChip) {
-            assemblyChipLayout(chip, replaceable)
+        if (!mChips.contains(chip)) {
+            if (!ChipEditText.isAddingChip) {
+                assemblyChipLayout(chip, replaceable)
+            }
+        } else {
+            Log.e(ChipEditText::class.simpleName, "No duplicated chip is allowed")
         }
     }
 
@@ -130,14 +153,18 @@ class ChipEditText : EditText, ChipControl {
     }
 
     override fun removeChip(chip: Chip) {
-        var diff = -1
-        for (value in ChipEditText.mSpans) {
-            if (value.id == chip.chipId) {
-                text = text.replace(value.start, value.end, "")
-                diff = value.end - value.start
-            } else if (diff != -1) {
-                value.start -= diff
-                value.end -= diff
+        mChips.remove(chip)
+        text = text.replace(chip.range.first, chip.range.second, "")
+        updateChipsRange()
+    }
+
+    private fun updateChipsRange() {
+        var diff1 = -1
+        for (value in mChips) {
+            if (value.range.second <= text.length) {
+                diff1 = value.range.second - value.range.first
+            } else if (diff1 != -1) {
+                value.range = Pair(value.range.first - diff1, value.range.second - diff1)
             }
         }
     }
@@ -148,10 +175,10 @@ class ChipEditText : EditText, ChipControl {
 
     override fun getTextWithNoSpans(): String {
         var max = 0
-        mSpans
+        mChips
                 .asSequence()
-                .filter { max < it.end }
-                .forEach { max = it.end }
+                .filter { max < it.range.second }
+                .forEach { max = it.range.second }
         return if (max < text.length) text.substring(max, text.length).trim() else ""
     }
 }

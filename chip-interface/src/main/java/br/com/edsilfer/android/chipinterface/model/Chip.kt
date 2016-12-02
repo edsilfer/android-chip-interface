@@ -6,20 +6,19 @@ package br.com.edsilfer.android.chipinterface.model
 
 abstract class Chip() {
 
-    companion object {
-        private var objCount = -1.toDouble()
-    }
-
-    var chipId = 0.toDouble()
-        private set
-
-    init {
-        chipId = objCount++
-    }
+    var range = Pair(0, 0)
 
     abstract fun getHeader(): String
 
     abstract fun getSubheader(): String
 
     abstract fun getThumbnail(): String
+
+    override fun hashCode(): Int {
+        return getHeader().hashCode() + getSubheader().hashCode() + getThumbnail().hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return !(other == null || other !is Chip || other.hashCode() != hashCode())
+    }
 }

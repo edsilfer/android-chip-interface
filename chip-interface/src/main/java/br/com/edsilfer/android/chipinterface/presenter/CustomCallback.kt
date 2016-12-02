@@ -19,6 +19,7 @@ import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.kotlin_support.extensions.getDrawable
+import br.com.edsilfer.kotlin_support.extensions.log
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.onClick
@@ -56,11 +57,9 @@ class CustomCallback(
         sb.setSpan(ImageSpan(bd), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         sb.setSpan(clickableSpannable, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        ChipEditText.mSpans.add(ChipEditText.Identifier(
-                start,
-                end,
-                mChip.chipId
-        ))
+        mChip.range = Pair(start, end)
+        ChipEditText.mChips.add(mChip)
+        log("Chip: ${mChip} was added successfully. Current chips are: ${ChipEditText.mChips}")
 
         mInput.setText(TextUtils.concat(sb, " "))
         mInput.setSelection(mInput.text.length)
@@ -70,7 +69,7 @@ class CustomCallback(
     }
 
     // TODO: ADD EFFECT INTO PALETTE
-    private fun showPopup(view : View) {
+    private fun showPopup(view: View) {
         val rootView = LayoutInflater.from(view.context).inflate(mPalette.style.getLayout(), null, false)
         rootView.animation = AnimationUtils.loadAnimation(view.context, android.R.anim.slide_in_left)
         val popup = PopupWindow(

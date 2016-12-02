@@ -53,6 +53,6 @@ class Chat(
     }
 
     override fun toString(): String {
-        return Gson().toJson(this)
+        return "name: ${getHeader()}, hash: ${hashCode()} | "
     }
 }
