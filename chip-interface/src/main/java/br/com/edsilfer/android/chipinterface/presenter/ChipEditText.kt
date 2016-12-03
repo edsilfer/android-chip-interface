@@ -15,9 +15,13 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
+import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
+import br.com.edsilfer.kotlin_support.extensions.isBetween
 import br.com.edsilfer.kotlin_support.extensions.log
+import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
+import br.com.edsilfer.kotlin_support.service.keyboard.EnhancedTextWatcher
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 
@@ -54,24 +58,16 @@ class ChipEditText : EditText, ChipControl {
     }
 
     fun init() {
-        addTextChangedListener(object : TextWatcher {
-
-            private var snapshot = ""
+        addTextChangedListener(object : EnhancedTextWatcher(this) {
             private var isRemoving = false
 
-            override fun afterTextChanged(p0: Editable) {
-            }
-
-            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
-                snapshot = text.toString()
-            }
-
-            override fun onTextChanged(sequence: CharSequence, start: Int, previousLength: Int, count: Int) {
-                if (!isRemoving && count == 0 && snapshot[start] != ' ') {
+            override fun onTextChanged(cursor: Int, isBackspace: Boolean, deletedChar: Char) {
+                if (isBackspace && deletedChar != ' ') {
                     isRemoving = true
-                    val chip = getErasedChip(start)
+                    val chip = getErasedChip(cursor)
                     if (chip != null) {
                         mChips.remove(chip)
+                        notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
                         updateChipsRange()
                     }
                     isRemoving = false
@@ -80,15 +76,9 @@ class ChipEditText : EditText, ChipControl {
 
             private fun getErasedChip(cursor: Int): Chip? {
                 mChips
-                        .filter { isBetween(it.range, cursor) }
+                        .filter { it.range.isBetween(cursor) }
                         .forEach { return it }
                 return null
-            }
-
-            // TODO: MOVE METHOD TO KOTLIN SUPPORT
-            private fun isBetween(range: Pair<Int, Int>, num: Int): Boolean {
-                if (num >= range.first && num <= range.second) return true
-                return false
             }
         })
     }
@@ -153,9 +143,15 @@ class ChipEditText : EditText, ChipControl {
     }
 
     override fun removeChip(chip: Chip) {
-        mChips.remove(chip)
-        text = text.replace(chip.range.first, chip.range.second, "")
-        updateChipsRange()
+        for (c in mChips) {
+            if (c == chip) {
+                text = text.replace(c.range.first, c.range.second, "")
+                mChips.remove(c)
+                notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
+                updateChipsRange()
+                break
+            }
+        }
     }
 
     private fun updateChipsRange() {

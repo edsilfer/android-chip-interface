@@ -17,9 +17,11 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
+import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.kotlin_support.extensions.getDrawable
 import br.com.edsilfer.kotlin_support.extensions.log
+import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.onClick
@@ -59,7 +61,7 @@ class CustomCallback(
 
         mChip.range = Pair(start, end)
         ChipEditText.mChips.add(mChip)
-        log("Chip: ${mChip} was added successfully. Current chips are: ${ChipEditText.mChips}")
+        notifySubscribers(ChipEvents.CHIP_ADDED, mChip)
 
         mInput.setText(TextUtils.concat(sb, " "))
         mInput.setSelection(mInput.text.length)
