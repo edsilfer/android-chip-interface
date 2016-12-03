@@ -39,6 +39,7 @@ class ChipEditText : EditText, ChipControl {
     }
 
     private var mPalette: ChipPalette? = null
+    private var mTextWatcher : TextWatcher? = null
 
     // CONSTUCTORs =================================================================================
     constructor(context: Context) : super(context) {
@@ -60,6 +61,21 @@ class ChipEditText : EditText, ChipControl {
     fun init() {
         addTextChangedListener(object : EnhancedTextWatcher(this) {
             private var isRemoving = false
+
+            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+                super.beforeTextChanged(sequence, start, count, after)
+                mTextWatcher?.beforeTextChanged(sequence, start, count, after)
+            }
+
+            override fun onTextChanged(sequence: CharSequence?, start: Int, previousLength: Int, count: Int) {
+                super.onTextChanged(sequence, start, previousLength, count)
+                mTextWatcher?.onTextChanged(sequence, start, previousLength, count)
+            }
+
+            override fun afterTextChanged(sequence: Editable?) {
+                super.afterTextChanged(sequence)
+                mTextWatcher?.afterTextChanged(sequence)
+            }
 
             override fun onTextChanged(cursor: Int, isBackspace: Boolean, deletedChar: Char) {
                 if (isBackspace && deletedChar != ' ') {
@@ -176,6 +192,10 @@ class ChipEditText : EditText, ChipControl {
                 .filter { max < it.range.second }
                 .forEach { max = it.range.second }
         return if (max < text.length) text.substring(max, text.length).trim() else ""
+    }
+
+    override fun addTextChangedListener(watcher: TextWatcher?) {
+        mTextWatcher = watcher
     }
 }
 
