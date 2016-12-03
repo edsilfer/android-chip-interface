@@ -129,9 +129,10 @@ class CustomCallback(
     }
 
     private fun getExpandedTextView(context: Context, content: String, style: Int): TextView {
-        val collapsedHeader = TextView(ContextThemeWrapper(context, style), null, 0)
-        collapsedHeader.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        collapsedHeader.text = content
-        return collapsedHeader
+        val tv = TextView(ContextThemeWrapper(context, style), null, 0)
+        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        tv.text = content
+        tv.gravity = Gravity.LEFT
+        return tv
     }
 }

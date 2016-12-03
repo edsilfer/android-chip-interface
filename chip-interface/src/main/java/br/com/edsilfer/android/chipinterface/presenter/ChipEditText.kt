@@ -39,7 +39,6 @@ class ChipEditText : EditText, ChipControl {
     }
 
     private var mPalette: ChipPalette? = null
-    private var mTextWatcher : TextWatcher? = null
 
     // CONSTUCTORs =================================================================================
     constructor(context: Context) : super(context) {
@@ -59,44 +58,7 @@ class ChipEditText : EditText, ChipControl {
     }
 
     fun init() {
-        addTextChangedListener(object : EnhancedTextWatcher(this) {
-            private var isRemoving = false
-
-            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
-                super.beforeTextChanged(sequence, start, count, after)
-                mTextWatcher?.beforeTextChanged(sequence, start, count, after)
-            }
-
-            override fun onTextChanged(sequence: CharSequence?, start: Int, previousLength: Int, count: Int) {
-                super.onTextChanged(sequence, start, previousLength, count)
-                mTextWatcher?.onTextChanged(sequence, start, previousLength, count)
-            }
-
-            override fun afterTextChanged(sequence: Editable?) {
-                super.afterTextChanged(sequence)
-                mTextWatcher?.afterTextChanged(sequence)
-            }
-
-            override fun onTextChanged(cursor: Int, isBackspace: Boolean, deletedChar: Char) {
-                if (isBackspace && deletedChar != ' ') {
-                    isRemoving = true
-                    val chip = getErasedChip(cursor)
-                    if (chip != null) {
-                        mChips.remove(chip)
-                        notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
-                        updateChipsRange()
-                    }
-                    isRemoving = false
-                }
-            }
-
-            private fun getErasedChip(cursor: Int): Chip? {
-                mChips
-                        .filter { it.range.isBetween(cursor) }
-                        .forEach { return it }
-                return null
-            }
-        })
+        addTextChangedListener(null)
     }
 
     override fun isSuggestionsEnabled(): Boolean {
@@ -195,7 +157,44 @@ class ChipEditText : EditText, ChipControl {
     }
 
     override fun addTextChangedListener(watcher: TextWatcher?) {
-        mTextWatcher = watcher
+        super.addTextChangedListener(object : EnhancedTextWatcher(this) {
+            private var isRemoving = false
+
+            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
+                super.beforeTextChanged(sequence, start, count, after)
+                watcher?.beforeTextChanged(sequence, start, count, after)
+            }
+
+            override fun onTextChanged(sequence: CharSequence?, start: Int, previousLength: Int, count: Int) {
+                super.onTextChanged(sequence, start, previousLength, count)
+                watcher?.onTextChanged(sequence, start, previousLength, count)
+            }
+
+            override fun afterTextChanged(sequence: Editable?) {
+                super.afterTextChanged(sequence)
+                watcher?.afterTextChanged(sequence)
+            }
+
+            override fun onTextChanged(cursor: Int, isBackspace: Boolean, deletedChar: Char) {
+                if (isBackspace && deletedChar != ' ') {
+                    isRemoving = true
+                    val chip = getErasedChip(cursor)
+                    if (chip != null) {
+                        mChips.remove(chip)
+                        notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
+                        updateChipsRange()
+                    }
+                    isRemoving = false
+                }
+            }
+
+            private fun getErasedChip(cursor: Int): Chip? {
+                mChips
+                        .filter { it.range.isBetween(cursor) }
+                        .forEach { return it }
+                return null
+            }
+        })
     }
 }
 
