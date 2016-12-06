@@ -19,8 +19,7 @@ import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
-import br.com.edsilfer.kotlin_support.extensions.getDrawable
-import br.com.edsilfer.kotlin_support.extensions.log
+import br.com.edsilfer.kotlin_support.extensions.getBitmapDrawable
 import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -43,7 +42,7 @@ class CustomCallback(
     }
 
     override fun onSuccess() {
-        val bd = mRootView.getDrawable()
+        val bd = mRootView.getBitmapDrawable()
         bd.setBounds(0, 0, bd.intrinsicWidth, bd.intrinsicHeight)
         val sb = SpannableStringBuilder(mInput.text)
 
