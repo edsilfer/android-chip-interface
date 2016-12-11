@@ -6,9 +6,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import br.com.edsilfer.android.chipinterface.demo.FakeDataProvider
 import br.com.edsilfer.android.chipinterface.demo.R
-import br.com.edsilfer.android.chipinterface.model.Presets
+import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
+import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
 import br.com.edsilfer.kotlin_support.extensions.paintStatusBar
+import br.com.edsilfer.kotlin_support.service.keyboard.EnhancedTextWatcher
 import kotlinx.android.synthetic.main.activity_sample_01.*
 
 /**
@@ -21,17 +23,15 @@ class ActivitySample01 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample_01)
         paintStatusBar(R.color.sample01colorPrimaryDark)
-        chipEditText.setChipStyle(Presets.preset01())
-        chipEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+        notifySubscribers(ChipEvents.ADD_STYLE, "template_default_android_chip.xml")
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+
+        chipEditText.addTextChangedListener(object : EnhancedTextWatcher(chipEditText) {
+            override fun onTextChanged(cursor: Int, isBackspace: Boolean, deletedChar: Char) {
                 val parts = chipEditText.text.toString().split(" ");
-                if (parts.last().length > 3 && p3 != 0) {
+                if (parts.last().length > 3 && !isBackspace) {
                     FakeDataProvider.provideChats()
                             .filter { it.getHeader().toLowerCase().contains(parts.last()) }
                             .forEach {

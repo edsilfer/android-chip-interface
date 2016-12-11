@@ -9,7 +9,6 @@ import br.com.edsilfer.android.chipinterface.demo.FakeDataProvider
 import br.com.edsilfer.android.chipinterface.demo.R
 import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
-import br.com.edsilfer.android.chipinterface.model.Presets
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.kotlin_support.extensions.addEventSubscriber
 import br.com.edsilfer.kotlin_support.model.Events
@@ -49,7 +48,6 @@ class ActivitySample02 : AppCompatActivity() {
             }
         })
 
-        from.setChipStyle(Presets.preset02())
         from.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }

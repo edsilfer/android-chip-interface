@@ -18,19 +18,24 @@ import br.com.edsilfer.android.chipinterface.model.Chip
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
+import br.com.edsilfer.android.chipinterface.model.xml.AndroidChip
+import br.com.edsilfer.kotlin_support.extensions.addEventSubscriber
 import br.com.edsilfer.kotlin_support.extensions.isBetween
-import br.com.edsilfer.kotlin_support.extensions.log
 import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
+import br.com.edsilfer.kotlin_support.model.Events
+import br.com.edsilfer.kotlin_support.model.ISubscriber
 import br.com.edsilfer.kotlin_support.service.keyboard.EnhancedTextWatcher
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
+import org.simpleframework.xml.core.Persister
+import org.w3c.dom.Node
 
 
 /**
  * Created by User on 24/11/2016.
  */
 
-class ChipEditText : EditText, ChipControl {
+class ChipEditText : EditText, ChipControl, ISubscriber {
 
     companion object {
         private var mCallback: CustomCallback? = null
@@ -46,18 +51,19 @@ class ChipEditText : EditText, ChipControl {
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init()
+        init(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
+        init(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init()
+        init(attrs)
     }
 
-    fun init() {
+    fun init(attrs: AttributeSet? = null) {
+        addEventSubscriber(ChipEvents.ADD_STYLE, this)
         addTextChangedListener(null)
     }
 
@@ -66,6 +72,26 @@ class ChipEditText : EditText, ChipControl {
     }
 
     // PUBLIC INTERFACE ============================================================================
+    override fun onEventTriggered(event: Events, payload: Any?) {
+        when (event) {
+            ChipEvents.ADD_STYLE -> {
+                //if (XMLValidator.validateAgainstSchema(context.assets.open(payload as String), context.assets.open("schema_android_chip.xsd"))) {
+                val serializer = Persister()
+                val example = serializer.read(AndroidChip::class.java, context.assets.open(payload as String))
+                println(example)
+                //}
+            }
+        }
+    }
+
+    fun getValue(rootNode: Node, query: Map<String, Any> = mutableMapOf(), result: List<Any> = listOf()) {
+        val nodeList = rootNode.childNodes
+        (0..nodeList.length - 1)
+                .map { nodeList.item(it) }
+                .filter { it.nodeType === Node.ELEMENT_NODE }
+                .forEach { getValue(it) }
+    }
+
     override fun addChip(chip: Chip, replaceable: String) {
         mPalette ?: throw IllegalArgumentException(context.getString(R.string.str_chip_interface_no_preset_error))
         if (!mChips.contains(chip)) {
@@ -181,8 +207,8 @@ class ChipEditText : EditText, ChipControl {
                     val chip = getErasedChip(cursor)
                     if (chip != null) {
                         mChips.remove(chip)
-                        notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
                         updateChipsRange()
+                        notifySubscribers(ChipEvents.CHIP_REMOVED, chip)
                     }
                     isRemoving = false
                 }
@@ -197,4 +223,3 @@ class ChipEditText : EditText, ChipControl {
         })
     }
 }
-

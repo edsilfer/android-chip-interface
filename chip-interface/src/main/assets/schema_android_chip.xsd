@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- COMMON TEXT ATTRIBUTES =============================================================================================== -->
+  <xs:element name="font" type="xs:string"/>
+
+  <xs:simpleType name="unities">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sp" />
+      <xs:enumeration value="dp" />
+      <xs:enumeration value="dpi" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="text-size-limits">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="12"/>
+      <xs:maxInclusive value="18"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="text-size">
+    <xs:simpleContent>
+      <xs:extension base="text-size-limits">
+        <xs:attribute name="unity" type="unities" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:element name="size" type="text-size" />
+
+  <xs:element name="style">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="normal" />
+        <xs:enumeration value="bold" />
+        <xs:enumeration value="bold|italic" />
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="color" type="xs:string"/>
+  <!-- TEXT ROOT ELEMENT SCHEMA -->
+  <xs:element name="text">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="font"/>
+        <xs:element ref="size"/>
+        <xs:element ref="style" />
+        <xs:element ref="color"/>
+      </xs:sequence>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="input" />
+            <xs:enumeration value="label" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- COMMON TEXT ATTRIBUTES =============================================================================================== -->
+  <xs:element name="background">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="class" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="top" />
+                <xs:enumeration value="bottom" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- COMMON TEXT ATTRIBUTES =============================================================================================== -->
+  <xs:element name="state">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="text" maxOccurs="2" minOccurs="1"/>
+        <xs:element ref="background" maxOccurs="2" minOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="collapsed" />
+            <xs:enumeration value="expanded" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- ROOT ELEMENT ========================================================================================================= -->
+  <xs:element name="chip">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="state" maxOccurs="unbounded" minOccurs="2"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
