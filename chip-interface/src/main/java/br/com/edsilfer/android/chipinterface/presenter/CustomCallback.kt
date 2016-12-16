@@ -1,6 +1,7 @@
 package br.com.edsilfer.android.chipinterface.presenter
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Rect
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -9,7 +10,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +17,17 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
+import br.com.edsilfer.android.chipinterface.model.ChipConstants
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
-import br.com.edsilfer.android.chipinterface.model.ChipPalette
+import br.com.edsilfer.android.chipinterface.model.xml.AndroidChip
 import br.com.edsilfer.kotlin_support.extensions.getBitmapDrawable
+import br.com.edsilfer.kotlin_support.extensions.log
 import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
+import br.com.edsilfer.kotlin_support.service.files.SharedPreferencesUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.onClick
+import org.simpleframework.xml.core.Persister
 
 
 /**
@@ -33,12 +37,18 @@ class CustomCallback(
         val mRootView: View,
         val mChip: Chip,
         val mInput: ChipEditText,
-        var mReplaceable: String,
-        val mPalette: ChipPalette
+        var mReplaceable: String
 ) : Callback {
+
+    private var mPalette: AndroidChip
 
     override fun onError() {
         Log.e(this.javaClass.simpleName, mRootView.context.getString(R.string.str_chip_interface_thumbnail_loading_error))
+    }
+
+    init {
+        val file = SharedPreferencesUtil.getProperty(mRootView.context, ChipConstants.CONFIGURATION_FILE, "") as Int
+        mPalette = Persister().read(AndroidChip::class.java, mRootView.context.resources.openRawResource(file))
     }
 
     override fun onSuccess() {
@@ -71,7 +81,7 @@ class CustomCallback(
 
     // TODO: ADD EFFECT INTO PALETTE
     private fun showPopup(view: View) {
-        val rootView = LayoutInflater.from(view.context).inflate(mPalette.style.getLayout(), null, false)
+        val rootView = LayoutInflater.from(view.context).inflate(R.layout.rsc_chip_details_circular_thumbnail, null, false)
         rootView.animation = AnimationUtils.loadAnimation(view.context, android.R.anim.slide_in_left)
         val popup = PopupWindow(
                 rootView,
@@ -108,8 +118,8 @@ class CustomCallback(
 
     private fun setLayout(popup: PopupWindow, view: View) {
         val infoWrapper = popup.contentView.findViewById(R.id.info_wrapper) as LinearLayout
-        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getHeader(), mPalette.expandedHeader))
-        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getSubheader(), mPalette.expandedSubheader))
+        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getHeader()))
+        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getSubheader()))
         val thumbnail = popup.contentView.findViewById(R.id.thumbnail) as ImageView
         val close = popup.contentView.findViewById(R.id.close) as ImageButton
         setBackgroundColor(popup)
@@ -121,14 +131,21 @@ class CustomCallback(
     }
 
     private fun setBackgroundColor(popup: PopupWindow) {
-        val upperBackground = popup.contentView.findViewById(R.id.upper_background)
+        val topBackground = popup.contentView.findViewById(R.id.upper_background)
         val bottomBackground = popup.contentView.findViewById(R.id.bottom_background)
-        upperBackground.setBackgroundColor(popup.contentView.context.resources.getColor(mPalette.upperBackground))
-        bottomBackground.setBackgroundColor(popup.contentView.context.resources.getColor(mPalette.bottomBackground))
+
+        val topColor = mPalette.state[1]!!.background["top"]
+        val bottomColor = mPalette.state[1]!!.background["bottom"]
+
+        log("retrieved top color: $topColor")
+        log("retrieved bottom color: $bottomColor")
+
+        topBackground.setBackgroundColor(Color.parseColor(topColor))
+        bottomBackground.setBackgroundColor(Color.parseColor(bottomColor))
     }
 
-    private fun getExpandedTextView(context: Context, content: String, style: Int): TextView {
-        val tv = TextView(ContextThemeWrapper(context, style), null, 0)
+    private fun getExpandedTextView(context: Context, content: String): TextView {
+        val tv = TextView(context)
         tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         tv.text = content
         tv.gravity = Gravity.LEFT

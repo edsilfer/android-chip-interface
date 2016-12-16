@@ -3,11 +3,19 @@
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#ffffff</item>
+    </style>
+
+    <style name="GreySearchContainer" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="colorAccent">#ffffff</item>
     </style>
 
     <style name="LightSearchContainer" parent="TextAppearance.AppCompat">
-        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:textColorHint">#ffffff</item>
+        <item name="android:textSize">20sp</item>
         <item name="colorAccent">#ffffff</item>
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlActivated">#ffffff</item>
     </style>
 </resources>

@@ -108,7 +108,7 @@ dependencies {
     }
 
     // OWN THIRD LIBRARIES
-    compile 'br.com.edsilfer:kotlin-support:1.0.19'
+    compile 'br.com.edsilfer:kotlin-support:1.0.20'
     compile 'br.com.instachat:emoji-library:1.0.7'
     compile 'br.com.edsilfer:list-manager:1.0.1'
 

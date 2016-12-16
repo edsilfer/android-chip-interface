@@ -1,12 +1,12 @@
 package br.com.edsilfer.android.chipinterface.presenter
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -15,8 +15,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
+import br.com.edsilfer.android.chipinterface.model.ChipConstants
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
-import br.com.edsilfer.android.chipinterface.model.ChipPalette
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.android.chipinterface.model.xml.AndroidChip
 import br.com.edsilfer.kotlin_support.extensions.addEventSubscriber
@@ -24,26 +24,29 @@ import br.com.edsilfer.kotlin_support.extensions.isBetween
 import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
 import br.com.edsilfer.kotlin_support.model.Events
 import br.com.edsilfer.kotlin_support.model.ISubscriber
+import br.com.edsilfer.kotlin_support.service.files.SharedPreferencesUtil
+import br.com.edsilfer.kotlin_support.service.files.XMLValidator
 import br.com.edsilfer.kotlin_support.service.keyboard.EnhancedTextWatcher
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 import org.simpleframework.xml.core.Persister
-import org.w3c.dom.Node
+import android.content.res.TypedArray
 
 
 /**
  * Created by User on 24/11/2016.
  */
 
-class ChipEditText : EditText, ChipControl, ISubscriber {
+class ChipEditText : EditText, ChipControl {
 
     companion object {
+        val SCHEMA_VALIDATOR = "schema_android_chip.xsd"
         private var mCallback: CustomCallback? = null
         var mChips = mutableSetOf<Chip>()
         var isAddingChip = false
     }
 
-    private var mPalette: ChipPalette? = null
+    private var mPalette: AndroidChip? = null
 
     // CONSTUCTORs =================================================================================
     constructor(context: Context) : super(context) {
@@ -63,8 +66,27 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
     }
 
     fun init(attrs: AttributeSet? = null) {
-        addEventSubscriber(ChipEvents.ADD_STYLE, this)
+        val templatePath = getTemplate(attrs)
+        if (templatePath != -1) {
+            val templateFile = context.resources.openRawResource(templatePath)
+            if (XMLValidator.validateAgainstSchema(templateFile, context.assets.open(SCHEMA_VALIDATOR))) {
+                SharedPreferencesUtil.putProperty(context, ChipConstants.CONFIGURATION_FILE, templatePath)
+                mPalette = Persister().read(AndroidChip::class.java, templateFile)
+            }
+        } else {
+            Log.e(ChipEditText.javaClass.simpleName, "No template file was provided")
+        }
+
         addTextChangedListener(null)
+    }
+
+    private fun getTemplate(attrs: AttributeSet?): Int {
+        val a = context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.ChipEditText,
+                0, 0)
+
+        return a.getResourceId(R.styleable.ChipEditText_template, -1)
     }
 
     override fun isSuggestionsEnabled(): Boolean {
@@ -72,28 +94,7 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
     }
 
     // PUBLIC INTERFACE ============================================================================
-    override fun onEventTriggered(event: Events, payload: Any?) {
-        when (event) {
-            ChipEvents.ADD_STYLE -> {
-                //if (XMLValidator.validateAgainstSchema(context.assets.open(payload as String), context.assets.open("schema_android_chip.xsd"))) {
-                val serializer = Persister()
-                val example = serializer.read(AndroidChip::class.java, context.assets.open(payload as String))
-                println(example)
-                //}
-            }
-        }
-    }
-
-    fun getValue(rootNode: Node, query: Map<String, Any> = mutableMapOf(), result: List<Any> = listOf()) {
-        val nodeList = rootNode.childNodes
-        (0..nodeList.length - 1)
-                .map { nodeList.item(it) }
-                .filter { it.nodeType === Node.ELEMENT_NODE }
-                .forEach { getValue(it) }
-    }
-
     override fun addChip(chip: Chip, replaceable: String) {
-        mPalette ?: throw IllegalArgumentException(context.getString(R.string.str_chip_interface_no_preset_error))
         if (!mChips.contains(chip)) {
             if (!ChipEditText.isAddingChip) {
                 assemblyChipLayout(chip, replaceable)
@@ -109,7 +110,7 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
         val view = inflater.inflate(R.layout.rsc_chip, null)
         val thumbnail = view.findViewById(R.id.thumbnail) as CircularImageView
         (view.findViewById(R.id.container) as RelativeLayout).addView(getCardView(chip))
-        mCallback = CustomCallback(view, chip, this, replaceable, mPalette!!)
+        mCallback = CustomCallback(view, chip, this, replaceable)
         Picasso.with(context).load(chip.getThumbnail()).into(thumbnail, mCallback)
     }
 
@@ -119,7 +120,7 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
         wrapper.layoutParams = params
         wrapper.addView(getCollapsedHeader(chip.getHeader()))
-        wrapper.setCardBackgroundColor(context.resources.getColor(mPalette!!.collapsedBackground))
+        wrapper.setCardBackgroundColor(Color.parseColor(mPalette!!.state[0]!!.background["collapsed"]))
         wrapper.radius = 50f
         return wrapper
     }
@@ -129,7 +130,7 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
         wrapper.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         wrapper.gravity = Gravity.CENTER_VERTICAL
 
-        val collapsedHeader = TextView(ContextThemeWrapper(context, mPalette!!.collapsedHeader), null, 0)
+        val collapsedHeader = TextView(context)
         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         params.setMargins(
@@ -169,9 +170,6 @@ class ChipEditText : EditText, ChipControl, ISubscriber {
         }
     }
 
-    override fun setChipStyle(style: ChipPalette) {
-        mPalette = style
-    }
 
     override fun getTextWithNoSpans(): String {
         var max = 0

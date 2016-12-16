@@ -13,8 +13,6 @@ interface ChipControl {
 
     fun removeChip(chip: Chip)
 
-    fun setChipStyle (style : ChipPalette)
-
     fun getTextWithNoSpans () : String
 
 }
