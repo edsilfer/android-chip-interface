@@ -2,7 +2,6 @@ package br.com.edsilfer.android.chipinterface.presenter
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Rect
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
@@ -17,17 +16,13 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
-import br.com.edsilfer.android.chipinterface.model.ChipConstants
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
-import br.com.edsilfer.android.chipinterface.model.xml.AndroidChip
-import br.com.edsilfer.kotlin_support.extensions.getBitmapDrawable
-import br.com.edsilfer.kotlin_support.extensions.log
-import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
-import br.com.edsilfer.kotlin_support.service.files.SharedPreferencesUtil
+import br.com.edsilfer.android.chipinterface.model.xml.State
+import br.com.edsilfer.kotlin_support.extensions.*
+import br.com.edsilfer.kotlin_support.model.xml.Text
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.onClick
-import org.simpleframework.xml.core.Persister
 
 
 /**
@@ -37,18 +32,12 @@ class CustomCallback(
         val mRootView: View,
         val mChip: Chip,
         val mInput: ChipEditText,
-        var mReplaceable: String
+        var mReplaceable: String,
+        var expandedState: State
 ) : Callback {
-
-    private var mPalette: AndroidChip
 
     override fun onError() {
         Log.e(this.javaClass.simpleName, mRootView.context.getString(R.string.str_chip_interface_thumbnail_loading_error))
-    }
-
-    init {
-        val file = SharedPreferencesUtil.getProperty(mRootView.context, ChipConstants.CONFIGURATION_FILE, "") as Int
-        mPalette = Persister().read(AndroidChip::class.java, mRootView.context.resources.openRawResource(file))
     }
 
     override fun onSuccess() {
@@ -93,33 +82,14 @@ class CustomCallback(
         popup.isFocusable = true
         popup.isOutsideTouchable = true
         setLayout(popup, rootView)
-        val location = locateView(view)
+        val location = view.locateView()
         popup.showAtLocation(view, Gravity.TOP or Gravity.LEFT, location!!.left, location.bottom)
-    }
-
-    // TODO: MOVE THIS SNIPPET TO KOTLIN EXTENSION
-    private fun locateView(v: View?): Rect? {
-        val loc_int = IntArray(2)
-        if (v == null) return null
-
-        try {
-            v.getLocationOnScreen(loc_int)
-        } catch (npe: NullPointerException) {
-            return null
-        }
-
-        val location = Rect()
-        location.left = loc_int[0]
-        location.top = loc_int[1]
-        location.right = location.left + v.width
-        location.bottom = location.top + v.height
-        return location
     }
 
     private fun setLayout(popup: PopupWindow, view: View) {
         val infoWrapper = popup.contentView.findViewById(R.id.info_wrapper) as LinearLayout
-        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getHeader()))
-        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getSubheader()))
+        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getHeader(), expandedState.text[0]))
+        infoWrapper.addView(getExpandedTextView(popup.contentView.context, mChip.getSubheader(), expandedState.text[0]))
         val thumbnail = popup.contentView.findViewById(R.id.thumbnail) as ImageView
         val close = popup.contentView.findViewById(R.id.close) as ImageButton
         setBackgroundColor(popup)
@@ -134,8 +104,8 @@ class CustomCallback(
         val topBackground = popup.contentView.findViewById(R.id.upper_background)
         val bottomBackground = popup.contentView.findViewById(R.id.bottom_background)
 
-        val topColor = mPalette.state[1]!!.background["top"]
-        val bottomColor = mPalette.state[1]!!.background["bottom"]
+        val topColor = expandedState.background["top"]
+        val bottomColor = expandedState.background["bottom"]
 
         log("retrieved top color: $topColor")
         log("retrieved bottom color: $bottomColor")
@@ -144,11 +114,13 @@ class CustomCallback(
         bottomBackground.setBackgroundColor(Color.parseColor(bottomColor))
     }
 
-    private fun getExpandedTextView(context: Context, content: String): TextView {
+
+    private fun getExpandedTextView(context: Context, content: String, style: Text): TextView {
         val tv = TextView(context)
         tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         tv.text = content
         tv.gravity = Gravity.LEFT
+        tv.setStyle(style)
         return tv
     }
 }

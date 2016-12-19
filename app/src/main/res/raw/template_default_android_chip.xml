@@ -2,31 +2,35 @@
 
 <chip id="default-theme">
     <state type="collapsed">
-        <text type="edit">
+        <text type="label">
             <font>sans-serif</font>
             <size>12</size>
             <style>normal</style>
-            <color>#ffffff</color>
+            <color>#a5a5a5</color>
         </text>
         <background type="collapsed">#f8f8fa</background>
     </state>
 
     <state type="expanded">
-        <text id="header" type="label">
-            <font>sans-serif</font>
-            <size>16</size>
-            <style>normal</style>
-            <color>#000000</color>
-        </text>
-
-        <text id="subheader" type="label">
+        <text
+            id="header"
+            type="label">
             <font>sans-serif</font>
             <size>14</size>
             <style>normal</style>
-            <color>#000000</color>
+            <color>#ffffff</color>
         </text>
 
-        <background type="top">#281B7B</background>
-        <background type="bottom">#3d3188</background>
+        <text
+            id="subheader"
+            type="label">
+            <font>sans-serif</font>
+            <size>12</size>
+            <style>normal</style>
+            <color>#ffffff</color>
+        </text>
+
+        <background type="top">#1A237E</background>
+        <background type="bottom">#283593</background>
     </state>
 </chip>

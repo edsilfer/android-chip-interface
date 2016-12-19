@@ -9,6 +9,8 @@ import org.simpleframework.xml.ElementMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.edsilfer.kotlin_support.model.xml.Text;
+
 /**
  * Created by User on 13/12/2016.
  */

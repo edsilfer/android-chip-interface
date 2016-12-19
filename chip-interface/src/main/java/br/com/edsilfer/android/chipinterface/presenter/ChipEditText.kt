@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -15,22 +16,17 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import br.com.edsilfer.android.chipinterface.R
 import br.com.edsilfer.android.chipinterface.model.Chip
-import br.com.edsilfer.android.chipinterface.model.ChipConstants
 import br.com.edsilfer.android.chipinterface.model.ChipEvents
 import br.com.edsilfer.android.chipinterface.model.intf.ChipControl
 import br.com.edsilfer.android.chipinterface.model.xml.AndroidChip
-import br.com.edsilfer.kotlin_support.extensions.addEventSubscriber
 import br.com.edsilfer.kotlin_support.extensions.isBetween
 import br.com.edsilfer.kotlin_support.extensions.notifySubscribers
-import br.com.edsilfer.kotlin_support.model.Events
-import br.com.edsilfer.kotlin_support.model.ISubscriber
-import br.com.edsilfer.kotlin_support.service.files.SharedPreferencesUtil
+import br.com.edsilfer.kotlin_support.extensions.setStyle
 import br.com.edsilfer.kotlin_support.service.files.XMLValidator
 import br.com.edsilfer.kotlin_support.service.keyboard.EnhancedTextWatcher
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 import org.simpleframework.xml.core.Persister
-import android.content.res.TypedArray
 
 
 /**
@@ -48,7 +44,7 @@ class ChipEditText : EditText, ChipControl {
 
     private var mPalette: AndroidChip? = null
 
-    // CONSTUCTORs =================================================================================
+    // CONSTRUCTORs =================================================================================
     constructor(context: Context) : super(context) {
         init()
     }
@@ -68,10 +64,10 @@ class ChipEditText : EditText, ChipControl {
     fun init(attrs: AttributeSet? = null) {
         val templatePath = getTemplate(attrs)
         if (templatePath != -1) {
-            val templateFile = context.resources.openRawResource(templatePath)
+            val typedValue = TypedValue()
+            val templateFile = context.resources.openRawResource(templatePath, typedValue)
             if (XMLValidator.validateAgainstSchema(templateFile, context.assets.open(SCHEMA_VALIDATOR))) {
-                SharedPreferencesUtil.putProperty(context, ChipConstants.CONFIGURATION_FILE, templatePath)
-                mPalette = Persister().read(AndroidChip::class.java, templateFile)
+                mPalette = Persister().read(AndroidChip::class.java, context.resources.openRawResource(templatePath, typedValue))
             }
         } else {
             Log.e(ChipEditText.javaClass.simpleName, "No template file was provided")
@@ -110,7 +106,7 @@ class ChipEditText : EditText, ChipControl {
         val view = inflater.inflate(R.layout.rsc_chip, null)
         val thumbnail = view.findViewById(R.id.thumbnail) as CircularImageView
         (view.findViewById(R.id.container) as RelativeLayout).addView(getCardView(chip))
-        mCallback = CustomCallback(view, chip, this, replaceable)
+        mCallback = CustomCallback(view, chip, this, replaceable, mPalette!!.state[1])
         Picasso.with(context).load(chip.getThumbnail()).into(thumbnail, mCallback)
     }
 
@@ -131,6 +127,8 @@ class ChipEditText : EditText, ChipControl {
         wrapper.gravity = Gravity.CENTER_VERTICAL
 
         val collapsedHeader = TextView(context)
+        collapsedHeader.setStyle(mPalette!!.state[0].text[0])
+
         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         params.setMargins(
@@ -169,7 +167,6 @@ class ChipEditText : EditText, ChipControl {
             }
         }
     }
-
 
     override fun getTextWithNoSpans(): String {
         var max = 0
