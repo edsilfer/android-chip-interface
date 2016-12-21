@@ -1,6 +1,18 @@
 # Android Chip Interface
 [ ![Download](https://api.bintray.com/packages/edsilfer/maven/chip-interface/images/download.svg) ](https://bintray.com/edsilfer/maven/chip-interface/_latestVersion) - **MIN API 16**
 
+<a name="summary">
+## Summary
+1. [Introduction](#introduction) 
+1. [How does it work?](#how-it-work) 
+⋅⋅1. [Step 01](#step1) 
+⋅⋅1. [Step 02](#step2) 
+⋅⋅1. [Step 03](#step3) 
+⋅⋅1. [Step 04](#step4) 
+⋅⋅1. [Step 05](#step5) 
+2. [License](#license) 
+
+<a name="introduction">
 ## Introduction
 >Chips represent complex entities in small blocks, such as a contact.
 >
@@ -15,6 +27,7 @@
   <i><b>Figure 01:</b> Android Chip Interface showcase</i>
 </p>
 
+<a name="how-it-work">
 ## How does it work?
 Android Chip Interface was developed using [Kotlin language](https://kotlinlang.org/). Kotlin is free to use and owned by [Jet Brains](https://www.jetbrains.com/). It adds a lot of cool features, boosting your productiveness while keeping everythying **100% compatible with Java.** 
 
@@ -30,7 +43,7 @@ compile 'br.com.edsilfer.android:chip-interface:1.0.9'
 ```
 
 <a name="step2">
-### Step 02: add ChipEditText to your layout file
+### Step 02: add ```ChipEditText``` to your layout file
 
 ```xml
   <br.com.edsilfer.android.chipinterface.presenter.ChipEditText
@@ -118,8 +131,8 @@ For custom layout, place a XML file on res/raw folder and pass it on template at
 
 *Note 02: In order to customize the input text style you can treat ChipEditText as a regular EditText.*
 
+<a name="license">
 ## License
-
 Copyright 2016 Edgar da Silva Fernandes
 
 Licensed under the Apache License, Version 2.0 (the "License");
