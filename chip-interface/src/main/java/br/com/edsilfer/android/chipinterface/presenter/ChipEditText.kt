@@ -68,6 +68,7 @@ class ChipEditText : EditText, ChipControl {
             val templateFile = context.resources.openRawResource(templatePath, typedValue)
             if (XMLValidator.validateAgainstSchema(templateFile, context.assets.open(SCHEMA_VALIDATOR))) {
                 mPalette = Persister().read(AndroidChip::class.java, context.resources.openRawResource(templatePath, typedValue))
+                if (mPalette == null) throw IllegalArgumentException("Please provide a XML file containing the layout for Android Chip")
             }
         } else {
             Log.e(ChipEditText.javaClass.simpleName, "No template file was provided")
