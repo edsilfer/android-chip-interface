@@ -1,9 +1,7 @@
 # Android Chip Interface
-===
 [ ![Download](https://api.bintray.com/packages/edsilfer/maven/chip-interface/images/download.svg) ](https://bintray.com/edsilfer/maven/chip-interface/_latestVersion) - **MIN API 16**
 
 ## Introduction
--
 >Chips represent complex entities in small blocks, such as a contact.
 >
 > Material Design Manifest - Chips _https://material.google.com/components/chips.html_
@@ -17,21 +15,23 @@
   <i><b>Figure 01:</b> Android Chip Interface showcase</i>
 </p>
 
-### How does it work?
+## How does it work?
 -
 Android Chip Interface was developed using [Kotlin language](https://kotlinlang.org/). Kotlin is free to use and owned by [Jet Brains](https://www.jetbrains.com/). It adds a lot of cool features, boosting your productiveness while keeping everythying **100% compatible with Java.** 
 
 _For details about technical implementation of this library please refer to the source code._
 
 
-- <a name="step1">**Step 01: import the module**
+<a name="step1">
+### Step 01: import the module
 
 Add the library module dependency to your project:
 ```groovy
-compile 'br.com.edsilfer.android:chip-interface:1.0.1'
+compile 'br.com.edsilfer.android:chip-interface:1.0.9'
 ```
 
-- <a name="step2">**Step 02: add `br.com.edsilfer.android.chipinterface.presenter.ChipEditText` to your layout file**
+- <a name="step2">
+### Step 02: add `br.com.edsilfer.android.chipinterface.presenter.ChipEditText` to your layout file
 
 ```xml
   <br.com.edsilfer.android.chipinterface.presenter.ChipEditText
@@ -41,7 +41,8 @@ compile 'br.com.edsilfer.android:chip-interface:1.0.1'
                     app:template="@raw/template_default_android_chip" />
 ```
 
-- <a name="step3">**Step 03: make your POJO extends `Chip` and override the abstract methods**
+<a name="step3">
+### Step 03: make your POJO extends `Chip` and override the abstract methods
 
 In order to render the chip correctly, Android Chip Interface requires that the complex object that will have its representation converted into a chip to extend the `Chip` class and implement its abstract methods:
 
@@ -55,7 +56,8 @@ abstract class Chip() {
 }
 ``` 
 
-- <a name="step4">**Step 04: use `ChipControl` interface to add and remove chips**
+<a name="step4">
+### Step 04: use `ChipControl` interface to add and remove chips
 
 `ChipEditTex` implements `ChipControl`, so you can retrieve it inside your code and call the methods:
 - `setChipStyle (style : ChipPalette)`: before using the methods below you must call this method in order to specify which design Android Chip Interface will use to render. You may customize your own layout or use some preset provided in `Presets` class:
@@ -70,7 +72,8 @@ abstract class Chip() {
 
 - `removeChip(chip: Chip)`: removes the prev priviously inserted chip;
 
-- <a name="step5">**Step 05: Customize Chip layout**
+<a name="step5">
+###Step 05: Customize Chip layout
 For custom layout, place a XML file on res/raw folder and pass it on template attribute of ChipEditText:
 
 ```XML
@@ -112,10 +115,13 @@ For custom layout, place a XML file on res/raw folder and pass it on template at
 </chip>
 ```
 
-*Note: this XML will be validate agains a XSD. Please, stick to the file structure.*
+*Note 01: this XML will be validate agains a XSD. Please, stick to the file structure.*
+*Note 02: In order to customize the input text style you can treat ChipEditText as a regular EditText.*
 
-License
--
+===
+
+##License
+
 Copyright 2016 Edgar da Silva Fernandes
 
 Licensed under the Apache License, Version 2.0 (the "License");
