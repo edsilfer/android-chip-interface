@@ -39,7 +39,7 @@ _For details about technical implementation of this library please refer to the 
 
 Add the library module dependency to your project:
 ```groovy
-compile 'br.com.edsilfer.android:chip-interface:1.0.9'
+compile 'br.com.edsilfer.android:chip-interface:1.0.10'
 ```
 
 <a name="step2">
