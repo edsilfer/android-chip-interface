@@ -2,7 +2,7 @@
 ===
 [ ![Download](https://api.bintray.com/packages/edsilfer/maven/chip-interface/images/download.svg) ](https://bintray.com/edsilfer/maven/chip-interface/_latestVersion) - **MIN API 16**
 
-Introduction
+## Introduction
 -
 >Chips represent complex entities in small blocks, such as a contact.
 >
@@ -17,7 +17,7 @@ Introduction
   <i><b>Figure 01:</b> Android Chip Interface showcase</i>
 </p>
 
-How does it work?
+### How does it work?
 -
 Android Chip Interface was developed using [Kotlin language](https://kotlinlang.org/). Kotlin is free to use and owned by [Jet Brains](https://www.jetbrains.com/). It adds a lot of cool features, boosting your productiveness while keeping everythying **100% compatible with Java.** 
 
@@ -37,7 +37,8 @@ compile 'br.com.edsilfer.android:chip-interface:1.0.1'
   <br.com.edsilfer.android.chipinterface.presenter.ChipEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    app:template="@raw/template_default_android_chip" />
 ```
 
 - <a name="step3">**Step 03: make your POJO extends `Chip` and override the abstract methods**
@@ -46,18 +47,6 @@ In order to render the chip correctly, Android Chip Interface requires that the 
 
 ```kotlin
 abstract class Chip() {
-
-    companion object {
-        private var objCount = -1.toDouble()
-    }
-
-    var chipId = 0.toDouble()
-        private set
-
-    init {
-        chipId = objCount++
-    }
-
     abstract fun getHeader(): String
 
     abstract fun getSubheader(): String
@@ -80,6 +69,50 @@ abstract class Chip() {
 - `addChip(chip: Chip, replaceable : String)`: adds a chip inside `ChipEditTex`. `replaceable` is the typed text existent on `ChipEditTex` that will be replaced by the chip; 
 
 - `removeChip(chip: Chip)`: removes the prev priviously inserted chip;
+
+- <a name="step5">**Step 05: Customize Chip layout**
+For custom layout, place a XML file on res/raw folder and pass it on template attribute of ChipEditText:
+
+```XML
+<?xml version="1.0"?>
+
+<chip id="default-theme">
+    <state type="collapsed">
+        <text type="label">
+            <font>sans-serif</font>
+            <size>12</size>
+            <style>normal</style>
+            <color>#a5a5a5</color>
+        </text>
+        <background type="collapsed">#f8f8fa</background>
+    </state>
+
+    <state type="expanded">
+        <text
+            id="header"
+            type="label">
+            <font>sans-serif</font>
+            <size>14</size>
+            <style>normal</style>
+            <color>#ffffff</color>
+        </text>
+
+        <text
+            id="subheader"
+            type="label">
+            <font>sans-serif</font>
+            <size>12</size>
+            <style>normal</style>
+            <color>#ffffff</color>
+        </text>
+
+        <background type="top">#1A237E</background>
+        <background type="bottom">#283593</background>
+    </state>
+</chip>
+```
+
+*Note: this XML will be validate agains a XSD. Please, stick to the file structure.*
 
 License
 -
