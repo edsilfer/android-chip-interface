@@ -16,7 +16,6 @@
 </p>
 
 ## How does it work?
--
 Android Chip Interface was developed using [Kotlin language](https://kotlinlang.org/). Kotlin is free to use and owned by [Jet Brains](https://www.jetbrains.com/). It adds a lot of cool features, boosting your productiveness while keeping everythying **100% compatible with Java.** 
 
 _For details about technical implementation of this library please refer to the source code._
@@ -73,7 +72,7 @@ abstract class Chip() {
 - `removeChip(chip: Chip)`: removes the prev priviously inserted chip;
 
 <a name="step5">
-###Step 05: Customize Chip layout
+### Step 05: Customize Chip layout
 For custom layout, place a XML file on res/raw folder and pass it on template attribute of ChipEditText:
 
 ```XML
@@ -116,11 +115,10 @@ For custom layout, place a XML file on res/raw folder and pass it on template at
 ```
 
 *Note 01: this XML will be validate agains a XSD. Please, stick to the file structure.*
+
 *Note 02: In order to customize the input text style you can treat ChipEditText as a regular EditText.*
 
-===
-
-##License
+## License
 
 Copyright 2016 Edgar da Silva Fernandes
 
