@@ -4,12 +4,12 @@
 <a name="summary">
 ## Summary
 1. [Introduction](#introduction) 
-1. [How does it work?](#how-it-work) 
-⋅⋅1. [Step 01](#step1) 
-⋅⋅1. [Step 02](#step2) 
-⋅⋅1. [Step 03](#step3) 
-⋅⋅1. [Step 04](#step4) 
-⋅⋅1. [Step 05](#step5) 
+2. [How does it work?](#how-it-work) 
+   * [Step 01](#step1) 
+   * [Step 02](#step2) 
+   * [Step 03](#step3) 
+   * [Step 04](#step4) 
+   * [Step 05](#step5) 
 2. [License](#license) 
 
 <a name="introduction">
