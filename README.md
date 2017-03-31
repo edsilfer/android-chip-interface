@@ -2,6 +2,7 @@
 [ ![Download](https://api.bintray.com/packages/edsilfer/maven/chip-interface/images/download.svg) ](https://bintray.com/edsilfer/maven/chip-interface/_latestVersion) - **MIN API 16**
 
 <a name="summary">
+
 ## Summary
 1. [Introduction](#introduction) 
 2. [How does it work?](#how-it-work) 
@@ -13,6 +14,7 @@
 2. [License](#license) 
 
 <a name="introduction">
+
 ## Introduction
 >Chips represent complex entities in small blocks, such as a contact.
 >
@@ -28,6 +30,7 @@
 </p>
 
 <a name="how-it-work">
+
 ## How does it work?
 Android Chip Interface was developed using [Kotlin language](https://kotlinlang.org/). Kotlin is free to use and owned by [Jet Brains](https://www.jetbrains.com/). It adds a lot of cool features, boosting your productiveness while keeping everythying **100% compatible with Java.** 
 
@@ -35,6 +38,7 @@ _For details about technical implementation of this library please refer to the 
 
 
 <a name="step1">
+
 ### Step 01: import the module
 
 Add the library module dependency to your project:
@@ -43,6 +47,7 @@ compile 'br.com.edsilfer.android:chip-interface:1.0.10'
 ```
 
 <a name="step2">
+
 ### Step 02: add ```ChipEditText``` to your layout file
 
 ```xml
@@ -54,6 +59,7 @@ compile 'br.com.edsilfer.android:chip-interface:1.0.10'
 ```
 
 <a name="step3">
+
 ### Step 03: make your POJO extends `Chip` and override the abstract methods
 
 In order to render the chip correctly, Android Chip Interface requires that the complex object that will have its representation converted into a chip to extend the `Chip` class and implement its abstract methods:
@@ -69,6 +75,7 @@ abstract class Chip() {
 ``` 
 
 <a name="step4">
+
 ### Step 04: use `ChipControl` interface to add and remove chips
 
 `ChipEditTex` implements `ChipControl`, so you can retrieve it inside your code and call the methods:
@@ -85,6 +92,7 @@ abstract class Chip() {
 - `removeChip(chip: Chip)`: removes the prev priviously inserted chip;
 
 <a name="step5">
+
 ### Step 05: Customize Chip layout
 For custom layout, place a XML file on res/raw folder and pass it on template attribute of ChipEditText:
 
@@ -132,6 +140,7 @@ For custom layout, place a XML file on res/raw folder and pass it on template at
 *Note 02: In order to customize the input text style you can treat ChipEditText as a regular EditText.*
 
 <a name="license">
+
 ## License
 Copyright 2016 Edgar da Silva Fernandes
 
